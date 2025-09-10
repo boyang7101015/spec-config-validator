@@ -1,0 +1,17 @@
+parsers:
+  - name: ontap_version
+    match: "NetApp Release\s+(?P<version>[\w\.]+)"
+    map:
+      cluster.version: "{version}"
+
+  - name: bmc_ipv4
+    match: "IPv4\s+(?P<ip>\d+\.\d+\.\d+\.\d+)\s+(?P<netmask>\d+\.\d+\.\d+\.\d+)\s+(?P<gateway>\d+\.\d+\.\d+\.\d+)"
+    map:
+      nodes[0].bmc.ip: "{ip}"
+      nodes[0].bmc.netmask: "{netmask}"
+      nodes[0].bmc.gateway: "{gateway}"
+
+  - name: disk_models
+    match: "(?ms)disk show -fields model.*?\n(?P<table>.+?)\n\d+ entries were displayed\."
+    map:
+      nodes[0].disks[].model: "table_to_list"

@@ -1,0 +1,27 @@
+rules:
+  - id: R-002
+    level: P0
+    title: ONTAP version equals expected
+    path_spec: spec.cluster.expected_version
+    path_conf: conf.cluster.version
+    compare:
+      - field: version
+        op: eq
+
+  - id: R-001-bmc-ip
+    level: P0
+    title: BMC IP matches
+    path_spec: spec.nodes[0].bmc.ip
+    path_conf: conf.nodes[0].bmc.ip
+    compare:
+      - field: value
+        op: eq
+
+  - id: R-101-disk-model
+    level: P1
+    title: Disk model belongs to allowed list
+    path_spec: spec.allowed_disk_models
+    path_conf: conf.nodes[0].disks[].model
+    compare:
+      - field: any_in
+        args: { mode: allow }
